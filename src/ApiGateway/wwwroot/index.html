@@ -1,0 +1,91 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title>Gateway Monitor</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body {
+            font-family: sans-serif;
+            text-align: center;
+            padding: 50px;
+            background: #f0f2f5;
+        }
+
+        .card {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            max-width: 600px;
+            margin: auto;
+        }
+
+        h1 {
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        .stats {
+            display: flex;
+            justify-content: space-around;
+            margin-top: 20px;
+            font-size: 1.2em;
+        }
+
+        .stat-box {
+            padding: 10px;
+            border-radius: 5px;
+        }
+
+        .green {
+            color: #2e7d32;
+            background: #e8f5e9;
+        }
+
+        .red {
+            color: #c62828;
+            background: #ffebee;
+        }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <h1>🛡️ API Gateway Live Monitor</h1>
+        <canvas id="trafficChart"></canvas>
+
+        <div class="stats">
+            <div class="stat-box green">Allowed: <span id="allowedCount">0</span></div>
+            <div class="stat-box red">Blocked: <span id="blockedCount">0</span></div>
+        </div>
+    </div>
+
+    <script>
+        const ctx = document.getElementById('trafficChart').getContext('2d');
+        const chart = new Chart(ctx, {
+            type: 'doughnut',
+            data: {
+                labels: ['Allowed', 'Blocked'],
+                datasets: [{
+                    data: [0, 0],
+                    backgroundColor: ['#4caf50', '#f44336']
+                }]
+            }
+        });
+
+        setInterval(async () => {
+            try {
+                const response = await fetch('/api/stats');
+                const data = await response.json();
+
+                // Update Text
+                document.getElementById('allowedCount').innerText = data.allowed;
+                document.getElementById('blockedCount').innerText = data.blocked;
+
+                // Update Chart
+                chart.data.datasets[0].data = [data.allowed, data.blocked];
+                chart.update();
+            } catch (err) { console.error("Error fetching stats", err); }
+        }, 500);
+    </script>
+</body>
+</html>
