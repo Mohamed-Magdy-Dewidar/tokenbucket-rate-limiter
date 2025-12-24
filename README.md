@@ -1,6 +1,4 @@
-Here is a professional, complete `README.md` file tailored exactly to your project. You can copy this directly into your GitHub repository.
 
----
 
 # 🛡️ Tiered Token Bucket Rate Limiter
 
