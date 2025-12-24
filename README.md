@@ -179,5 +179,3 @@ Run the script again.
 This project is licensed under the MIT License - see the LICENSE file for details.
 
 ---
-
-*This project was developed for the Cybersecurity/Network Security Course (Fall 2025).*
